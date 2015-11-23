@@ -1,8 +1,8 @@
 <?php
 
 // all possible GET vars
-// $_GET["csv"] 
-// $_GET["debug"] 
+// $_GET["csv"]
+// $_GET["debug"]
 // $_GET['date_from'];
 // $_GET['date_to'];
 // $_GET['mod']
@@ -17,28 +17,29 @@ $date = $_GET['date'];
 $date_from = $_GET['date_from'];
 $date_to = $_GET['date_to'];
 
+$prefix = 'EF9-';
+$suffix = 'A-N7-34';
+$suggestedName =  $prefix . date("Ymd") . $suffix;
+$file_name = $suggestedName . '.csv';
 
-if ($temp_created == 1) { // this means this file will be included. 
+if ($temp_created == 1) { // this means this file will be included.
 
 	//$exportfile = readCSV2('temp_export.csv');
 	//print_r($exportfile);
-	
-	// now call rscript to process the temp csv file 
+
+	// now call rscript to process the temp csv file
 	$command = 'C:\"Program Files"\R\R-3.2.2\bin\Rscript.exe export_rearrange.R'; // later move to relative path and PATH varibale
 	//echo "now calling R script to rearrange columns: ".$command;
 	exec($command);
-		
+
 	header('Content-type: text/csv; Charset=utf-8');
-	header("Content-Disposition: attachment; filename=datatest.csv");		
-	readfile('processed_temp_export.csv');	
+	header("Content-Disposition: attachment; filename=datatest.csv");
+	//readfile('processed_temp_export.csv');
+	readfile($file_name);
 
 } else { // if this is not included with temp_generated set but called as standalone, then display these links
 
 	echo "<a href='generate_csv.php?csv=1&date_from=".$date_from."&date_to=".$date_to."&mod=".$_GET['mod']."'>download raw csv</a><br>";
-	
-	$prefix = 'EF9-';
-	$suffix = 'A-N7-34';
-	$suggestedName =  $prefix . date("Ymd") . $suffix;
 
 	echo "suggested filename: ".$suggestedName;
 
